@@ -3,21 +3,20 @@ using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
-{   
-    [Header("Assignables")]
-    //Assignables
-	public Transform playerCam;
+{
+	[Header("Assignables")]
+	//Assignables
 	public Transform orientation;
 	private Collider playerCollider;
 	public Rigidbody rb;
 
-    [Space(10)]
+	[Space(10)]
 
 	public LayerMask whatIsGround;
 	public LayerMask whatIsWallrunnable;
 
-    [Header("MovementSettings")]
-    //Movement Settings 
+	[Header("MovementSettings")]
+	//Movement Settings 
 	public float sensitivity = 50f;
 	public float moveSpeed = 4500f;
 	public float walkSpeed = 20f;
@@ -25,48 +24,47 @@ public class PlayerMovement : MonoBehaviour
 	public bool grounded;
 	public bool onWall;
 
-    //Private Floats
-    private float wallRunGravity = 1f;
+	//Private Floats
+	private float wallRunGravity = 1f;
 	private float maxSlopeAngle = 35f;
 	private float wallRunRotation;
-    private float slideSlowdown = 0.2f;
+	private float slideSlowdown = 0.2f;
 	private float actualWallRotation;
 	private float wallRotationVel;
 	private float desiredX;
 	private float xRotation;
-	private float sensMultiplier = 1f;
 	private float jumpCooldown = 0.25f;
 	private float jumpForce = 550f;
 	private float x;
 	private float y;
 	private float vel;
 
-    //Private bools
+	//Private bools
 	private bool readyToJump;
 	private bool jumping;
 	private bool sprinting;
-    private bool crouching;
+	private bool crouching;
 	private bool wallRunning;
-    private bool cancelling;
+	private bool cancelling;
 	private bool readyToWallrun = true;
-    private bool airborne;
-    private bool onGround;
+	private bool airborne;
+	private bool onGround;
 	private bool surfing;
 	private bool cancellingGrounded;
 	private bool cancellingWall;
 	private bool cancellingSurf;
 
-    //Private Vector3's
+	//Private Vector3's
 	private Vector3 grapplePoint;
 	private Vector3 normalVector;
 	private Vector3 wallNormalVector;
 	private Vector3 wallRunPos;
 	private Vector3 previousLookdir;
 
-    //Private int
+	//Private int
 	private int nw;
-    
-    //Instance
+
+	//Instance
 	public static PlayerMovement Instance { get; private set; }
 
 	private void Awake()
@@ -86,25 +84,23 @@ public class PlayerMovement : MonoBehaviour
 
 	private void LateUpdate()
 	{
-        //For wallrunning
-	    WallRunning();
+		//For wallrunning
+		WallRunning();
 	}
 
 	private void FixedUpdate()
 	{
-        //For moving
+		//For moving
 		Movement();
 	}
 
 	private void Update()
 	{
-        //Input
+		//Input
 		MyInput();
-        //Looking around
-		Look();
 	}
 
-    //Player input
+	//Player input
 	private void MyInput()
 	{
 		x = Input.GetAxisRaw("Horizontal");
@@ -121,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-    //Scale player down
+	//Scale player down
 	private void StartCrouch()
 	{
 		float num = 400f;
@@ -133,14 +129,14 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-    //Scale player to original size
+	//Scale player to original size
 	private void StopCrouch()
 	{
 		base.transform.localScale = new Vector3(1f, 1.5f, 1f);
 		base.transform.position = new Vector3(base.transform.position.x, base.transform.position.y + 0.5f, base.transform.position.z);
 	}
 
-    //Moving around with WASD
+	//Moving around with WASD
 	private void Movement()
 	{
 		rb.AddForce(Vector3.down * Time.deltaTime * 10f);
@@ -203,57 +199,43 @@ public class PlayerMovement : MonoBehaviour
 		rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * num4);
 	}
 
-    //Ready to jump again
+	//Ready to jump again
 	private void ResetJump()
 	{
 		readyToJump = true;
 	}
 
-    //Player go fly
+	//Player go fly
 	private void Jump()
 	{
-        if ((grounded || wallRunning || surfing) && readyToJump)
+		if ((grounded || wallRunning || surfing) && readyToJump)
 		{
-		    MonoBehaviour.print("jumping");
-		    Vector3 velocity = rb.linearVelocity;
-		    readyToJump = false;
-		    rb.AddForce(Vector2.up * jumpForce * 1.5f);
-		    rb.AddForce(normalVector * jumpForce * 0.5f);
-		    if (rb.linearVelocity.y < 0.5f)
-		    {
-			    rb.linearVelocity = new Vector3(velocity.x, 0f, velocity.z);
-		    }
-		    else if (rb.linearVelocity.y > 0f)
-		    {
-			    rb.linearVelocity = new Vector3(velocity.x, velocity.y / 2f, velocity.z);
-		    }
-		    if (wallRunning)
-		    {
-			    rb.AddForce(wallNormalVector * jumpForce * 3f);
-		    }
-		    Invoke("ResetJump", jumpCooldown);
-		    if (wallRunning)
-		    {
-			    wallRunning = false;
-		    }
-        }
+			MonoBehaviour.print("jumping");
+			Vector3 velocity = rb.linearVelocity;
+			readyToJump = false;
+			rb.AddForce(Vector2.up * jumpForce * 1.5f);
+			rb.AddForce(normalVector * jumpForce * 0.5f);
+			if (rb.linearVelocity.y < 0.5f)
+			{
+				rb.linearVelocity = new Vector3(velocity.x, 0f, velocity.z);
+			}
+			else if (rb.linearVelocity.y > 0f)
+			{
+				rb.linearVelocity = new Vector3(velocity.x, velocity.y / 2f, velocity.z);
+			}
+			if (wallRunning)
+			{
+				rb.AddForce(wallNormalVector * jumpForce * 3f);
+			}
+			Invoke("ResetJump", jumpCooldown);
+			if (wallRunning)
+			{
+				wallRunning = false;
+			}
+		}
 	}
 
-    //Looking around by using your mouse
-	private void Look()
-	{
-		float num = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-		float num2 = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-		desiredX = playerCam.transform.localRotation.eulerAngles.y + num;
-		xRotation -= num2;
-		xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-		FindWallRunRotation();
-		actualWallRotation = Mathf.SmoothDamp(actualWallRotation, wallRunRotation, ref wallRotationVel, 0.2f);
-		playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, actualWallRotation);
-		orientation.transform.localRotation = Quaternion.Euler(0f, desiredX, 0f);
-	}
-
-    //Make the player movement feel good 
+	//Make the player movement feel good 
 	private void CounterMovement(float x, float y, Vector2 mag)
 	{
 		if (!grounded || jumping)
@@ -300,10 +282,11 @@ public class PlayerMovement : MonoBehaviour
 			wallRunRotation = 0f;
 			return;
 		}
-		_ = new Vector3(0f, playerCam.transform.rotation.y, 0f).normalized;
+		Transform cam = Camera.main != null ? Camera.main.transform : orientation;
+		_ = new Vector3(0f, cam.rotation.y, 0f).normalized;
 		new Vector3(0f, 0f, 1f);
 		float num = 0f;
-		float current = playerCam.transform.rotation.eulerAngles.y;
+		float current = cam.rotation.eulerAngles.y;
 		if (Math.Abs(wallNormalVector.x - 1f) < 0.1f)
 		{
 			num = 90f;
@@ -492,7 +475,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public Transform GetPlayerCamTransform()
 	{
-		return playerCam.transform;
+		return Camera.main != null ? Camera.main.transform : orientation;
 	}
 
 	public bool IsCrouching()
