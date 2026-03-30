@@ -4777,26 +4777,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 192258943460977185, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
-      propertyPath: m_Intensity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3491539190373893948, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
-      propertyPath: LightsModule.light
-      value: 
-      objectReference: {fileID: 2063718822}
     - target: {fileID: 4886765521556467326, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
       propertyPath: m_Name
       value: VFX&Lights & Post Processing
       objectReference: {fileID: 0}
-    - target: {fileID: 4886765521556467326, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5368967497147685611, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
-      propertyPath: LightsModule.light
-      value: 
-      objectReference: {fileID: 1601402000}
     - target: {fileID: 7731119098880532909, guid: e04a9369e4bbdc348aab7368c70dfbc6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -22452,8 +22436,8 @@ MonoBehaviour:
     walkByDefault: 0
     rotateWithCamera: 0
     walkSpeed: 2
-    runningSpeed: 4
-    sprintSpeed: 6
+    runningSpeed: 5
+    sprintSpeed: 10
   strafeSpeed:
     movementSmooth: 6
     animationSmooth: 0.2
@@ -22467,7 +22451,7 @@ MonoBehaviour:
   jumpAndRotate: 1
   jumpTimer: 0.3
   jumpHeight: 7
-  airSpeed: 15
+  airSpeed: 10
   airSmooth: 7
   extraGravity: -20
   limitFallVelocity: -15
@@ -23229,11 +23213,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 82e3ebe75bab28744b4da9798933ba9f, type: 3}
   m_PrefabInstance: {fileID: 1598128788}
-  m_PrefabAsset: {fileID: 0}
---- !u!108 &1601402000 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 6789702104059511059, guid: e38d8da1b723e17449dc96bf5f4368dc, type: 3}
-  m_PrefabInstance: {fileID: 1096793902645584286}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1609311134
 PrefabInstance:
@@ -28292,11 +28271,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 82e3ebe75bab28744b4da9798933ba9f, type: 3}
   m_PrefabInstance: {fileID: 2057012130}
-  m_PrefabAsset: {fileID: 0}
---- !u!108 &2063718822 stripped
-Light:
-  m_CorrespondingSourceObject: {fileID: 3262439708262450171, guid: e38d8da1b723e17449dc96bf5f4368dc, type: 3}
-  m_PrefabInstance: {fileID: 1096793902645584286}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2075006664
 PrefabInstance:
