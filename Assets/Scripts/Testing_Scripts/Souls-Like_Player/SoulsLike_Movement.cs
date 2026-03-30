@@ -1,4 +1,5 @@
 using UnityEngine;
+using CombatSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(SoulsLike_InputHandler))]
@@ -18,6 +19,8 @@ public class SoulsLike_Movement : MonoBehaviour
     [SerializeField] private Stamina _stamina;
     [Tooltip("Optional StateManager to lock movement during combat")]
     [SerializeField] private SoulsLike_StateManager _stateManager;
+    [Tooltip("Reference to the LockOnManager for strafe behavior during lock-on.")]
+    [SerializeField] private LockOnManager _lockOnManager;
 
     private CharacterController _controller;
     private SoulsLike_InputHandler _inputHandler;
@@ -140,8 +143,25 @@ public class SoulsLike_Movement : MonoBehaviour
 
             // Calculate exact world movement vector based on WASD input
             moveDirection = (camForward * input.y + camRight * input.x).normalized;
+        }
 
-            // Character Rotation (Smoothly turn to face where we are walking)
+        // 2b. Handle Rotation (Lock-On vs Free Movement)
+        bool isLockedOn = _lockOnManager != null && _lockOnManager.IsLockedOn && _lockOnManager.CurrentTargetProxy != null;
+
+        if (isLockedOn)
+        {
+            // Souls-like: Always face the enemy during lock-on, player strafes instead of spinning
+            Vector3 dirToEnemy = _lockOnManager.CurrentTargetProxy.position - transform.position;
+            dirToEnemy.y = 0;
+            if (dirToEnemy.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(dirToEnemy.normalized);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
+        }
+        else if (moveDirection.sqrMagnitude > 0.01f)
+        {
+            // Free movement: Smoothly turn to face where we are walking
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
